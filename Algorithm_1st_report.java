@@ -66,57 +66,60 @@ public class Algorithm_1st_report {
             int left = 2 * index; // 왼쪽 자식 노드 index 계산
             int right = 2 * index + 1; // 오른쪽 자식 노드 index 계산
 
+            // [왼쪽] 히프 내에 있고, 현 노드보다 작다면 index 수정
             if (left <= size && heap[left].compareTo(heap[smallest]) < 0) {
                 smallest = left;
             }
 
+            // [오른쪽] 히프 내에 있고, 현 노드보다 작다면 index 수정
             if (right <= size && heap[right].compareTo(heap[smallest]) < 0) {
                 smallest = right;
             }
 
+            // 가장 작은 값이 현 index 값이 아니라면 위치 바꾸기
             if (smallest != index) {
-                swap(index, smallest);
-                minHeapify(smallest);
+                swap(index, smallest); // 노드 위치 바꾸기
+                minHeapify(smallest); // 히프의 속성 유지를 위해 변경된 트리에서도 재호출
             }
         }
 
-        private void swap(int i, int j) {
-            Node temp = heap[i];
+        private void swap(int i, int j) { // 히프 배열에서 두 개 노드 위치 변경
+            Node temp = heap[i]; // 히프 노드 변경 구간
             heap[i] = heap[j];
             heap[j] = temp;
 
-            vertexPosition[heap[i].vertex] = i;
+            vertexPosition[heap[i].vertex] = i; // 위치가 바뀐 노드도 vertexPosition 배열 업데이트
             vertexPosition[heap[j].vertex] = j;
         }
     }
 
     public void primMST(int[][] graph, int n) { // 인접 행렬 표현으로 생성된 이차원 배열 graph, 그래프의 정점 수 n
-        int[] distance = new int[n]; // 정점과
-        int[] nearest = new int[n];
+        int[] distance = new int[n]; // 각 정점까지의 최소 가중치 저장
+        int[] nearest = new int[n]; // 최소 신장 트리에 가장 가까운 정점 저장
         boolean[] MST_V = new boolean[n]; // 이미 포함된 정점인지 여부를 표시하는 배열
-        MinHeap heap = new MinHeap(n);
+        MinHeap heap = new MinHeap(n); // 정점들 관리하기 위한 최소 히프 생성
 
         for (int i = 0; i < n; i++) {
-            distance[i] = INF;
-            nearest[i] = -1;
-            MST_V[i] = false;
-            heap.add(new Node(i, distance[i]));
+            distance[i] = INF; // 무한대로 초기화
+            nearest[i] = -1; // -1(없음)으로 초기화
+            MST_V[i] = false; // 모든 정점이 아직 포함되지 않음을 표시를 위한 초기화
+            heap.add(new Node(i, distance[i])); // 모든 정점을 히프에 추가.
         }
 
-        distance[0] = 0;
+        distance[0] = 0; // 최소 신장 트리의 프림 알고리즘 첫 시작점 0 설정
         heap.decreaseKey(0, distance[0]);
 
-        for (int i = 0; i < n - 1; i++) { // loop(n-2)에 해당하는 부분
-            Node u = heap.delete_min_heap();
-            MST_V[u.vertex] = true;
+        for (int i = 0; i < n - 1; i++) { // n-1개의 간선이 추가될 때까지 반복
+            Node u = heap.delete_min_heap(); // 히프에서 최소 가중치 노드를 삭제함과 동시에 반한해서 저장
+            MST_V[u.vertex] = true;  // 추출한 최소 가중치 노드는 이제 입력 되므로 정점에 등록을 알림
 
             // for each (u에 인접한 정점 w)에 해당하는 부분
             for (int w = 0; w < n; w++) {
-                if (graph[u.vertex][w] != 0 && !MST_V[w]) {
-                    if (graph[u.vertex][w] < distance[w]) {
-                        heap.decreaseKey(w, graph[u.vertex][w]);
-                        nearest[w] = u.vertex;
-                        distance[w] = graph[u.vertex][w];
+                if (graph[u.vertex][w] != 0 && !MST_V[w]) { // MST_V에 ture(등록)된 정점이 아니며 인접 행렬에서 0이 아닌 경우
+                    if (graph[u.vertex][w] < distance[w]) { // 만약 간선의 가중치가 현재 w까지의 거리보다 작으면
+                        heap.decreaseKey(w, graph[u.vertex][w]); // 히프에서 w 정점 거리를 기반으로 호출
+                        nearest[w] = u.vertex; // nearest 배열 업데이트
+                        distance[w] = graph[u.vertex][w]; // distance 배열 업데이트
                     }
                 }
             }
