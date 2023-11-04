@@ -1,12 +1,14 @@
 import java.util.*;
 
 public class Algorithm_1st_report {
-    private static final int INF = Integer.MAX_VALUE; // INF
+    private static final int INF = Integer.MAX_VALUE; // INF를 int 최대 값으로 설정하여 무한대를 의미
 
-    static class Node implements Comparable<Node> { // 그래프의 각 정점의 (정점의 번호, 가중치) 정보를 설정.
+    static class Node implements Comparable<Node> { // 그래프의 각 정점의 (정점의 번호, 가중치) 정보를 설정
         int vertex; // 정점의 번호
         int key; // 가중치
 
+        // Node 클래스의 생성자
+        // 생성자를 통해서 객체 생성 시 정점의 번호와 가중치를 초기화
         public Node(int vertex, int key) {
             this.vertex = vertex;
             this.key = key;
@@ -15,23 +17,25 @@ public class Algorithm_1st_report {
         @Override // Comparable 인터페이스의 compareTo 메소드를 오버라이드
         public int compareTo(Node other) {
             return Integer.compare(this.key, other.key); // 현재 노드의 key와 다른 노드의 key를 비교
+            // 반환 값을 현재 객체의 key값이 더 작으면 음수, 같으면 0, 더 크면 양수 반환
         }
     }
 
+    // MinHeap (최소 히프) 클래스 선언
     static class MinHeap {
-        Node[] heap;
-        int size; // 배열 내에 사용 중인 요소의 수 표현
-        int[] vertexPosition;
+        Node[] heap; // Node 타입의 배열을 선언
+        int size; // 배열 내에 사용 중인 요소의 수 표현하는 변수 선언
+        int[] vertexPosition; // 정점 번호의 위치를 저장하는 배열 선언
 
         public MinHeap(int maxsize) { // 히프의 생성자 [ 생성과 동시에 초기화 진행 ]
-            this.size = 0; // 크기를 0으로 설정
-            heap = new Node[maxsize + 1]; //
-            vertexPosition = new int[maxsize];
-            Arrays.fill(vertexPosition, -1);
+            this.size = 0; // 현재 힙의 크기를 0으로 설정
+            heap = new Node[maxsize + 1]; // 힙 배열을 초기화 [ 분석에 이해를 돕기 위해 인덱스 1부터 시작해 크기를 더 크게 선언 ]
+            vertexPosition = new int[maxsize]; // 정점의 위치를 저장할 배열 초기화
+            Arrays.fill(vertexPosition, -1); // 모든 정점의 위치를 -1로 채움으로 초기화.
         }
 
-        public void add(Node node) {
-            heap[++size] = node;
+        public void add(Node node) { // 새로운 Node 객체를 힙에 추가하는 메소드
+            heap[++size] = node; //
             vertexPosition[node.vertex] = size;
             decreaseKey(node.vertex, node.key);
         }
@@ -86,10 +90,10 @@ public class Algorithm_1st_report {
         }
     }
 
-    public void primMST(int[][] graph, int n) {
-        int[] distance = new int[n];
+    public void primMST(int[][] graph, int n) { // 인접 행렬 표현으로 생성된 이차원 배열 graph, 그래프의 정점 수 n
+        int[] distance = new int[n]; // 정점과
         int[] nearest = new int[n];
-        boolean[] MST_V = new boolean[n];
+        boolean[] MST_V = new boolean[n]; // 이미 포함된 정점인지 여부를 표시하는 배열
         MinHeap heap = new MinHeap(n);
 
         for (int i = 0; i < n; i++) {
@@ -145,8 +149,7 @@ public class Algorithm_1st_report {
                 {8, 11, 0, 0, 0, 0, 1, 0, 7},// [7]
                 {0, 0, 2, 0, 0, 0, 6, 7, 0}// [8]
         };
-
         Algorithm_1st_report A_1_r = new Algorithm_1st_report(); // 클래스의 인스턴스 A_i_r 생성
-        A_1_r.primMST(graph, graph.length); // 생성된 인스턴스를 통해 'primMST' 메소드 호출로 최소 히프를 사용한 프림 알고리즘 실행.
+        A_1_r.primMST(graph, graph.length); // 생성된 인스턴스를 통해 'primMST' 메소드 호출로 최소 히프를 사용한 프림 알고리즘 실행
     }
 }
