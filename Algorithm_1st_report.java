@@ -28,43 +28,43 @@ public class Algorithm_1st_report {
         int[] vertexPosition; // 정점 번호의 위치를 저장하는 배열 선언
 
         public MinHeap(int maxsize) { // 히프의 생성자 [ 생성과 동시에 초기화 진행 ]
-            this.size = 0; // 현재 힙의 크기를 0으로 설정
-            heap = new Node[maxsize + 1]; // 힙 배열을 초기화 [ 분석에 이해를 돕기 위해 인덱스 1부터 시작해 크기를 더 크게 선언 ]
+            this.size = 0; // 현재 히프의 크기를 0으로 설정
+            heap = new Node[maxsize + 1]; // 히프 배열을 초기화 [ 분석에 이해를 돕기 위해 인덱스 1부터 시작해 크기를 더 크게 선언 ]
             vertexPosition = new int[maxsize]; // 정점의 위치를 저장할 배열 초기화
-            Arrays.fill(vertexPosition, -1); // 모든 정점의 위치를 -1로 채움으로 초기화.
+            Arrays.fill(vertexPosition, -1); // 모든 정점의 위치를 -1로 채움으로 초기화
         }
 
-        public void add(Node node) { // 새로운 Node 객체를 힙에 추가하는 메소드
-            heap[++size] = node; //
-            vertexPosition[node.vertex] = size;
-            decreaseKey(node.vertex, node.key);
+        public void add(Node node) { // 새로운 Node 객체를 히프에 추가하는 메소드
+            heap[++size] = node; // size 1증가와 함께 히프의 다음 위치에 노드를 추가
+            vertexPosition[node.vertex] = size; // 추가된 노드의 정점 번호에 해당 위치 정보 저장
+            decreaseKey(node.vertex, node.key); // 히프의 속성을 유지하기 위해 key 값을 감소
         }
 
-        public void decreaseKey(int vertex, int newKey) {
-            int index = vertexPosition[vertex];
-            Node node = heap[index];
-            node.key = newKey;
+        public void decreaseKey(int vertex, int newKey) { // 히프 내에 있는 특정 노드의 키 값을 감소 [ 히프 속성 유지 ]
+            int index = vertexPosition[vertex]; // 정점의 위치를 새로운 index 변수에 저장
+            Node node = heap[index]; // 해당 index에 위치한 히프 배열을 추출해 node에 저장
+            node.key = newKey; // // 노드의 키 값을 새로운 키 값으로 저장
 
-            while (index > 1 && heap[index / 2].compareTo(node) > 0) {
-                swap(index, index / 2);
-                index = index / 2;
+            while (index > 1 && heap[index / 2].compareTo(node) > 0) { // 노드가 루트가 아니고, 부모 노드의 값이 현재 노드 키 값보다 크면 계속 탐색
+                swap(index, index / 2); // 현 노드와 부모 노드 위치 교환
+                index = index / 2; // 교환 후 index를 부모 노드의 index로 교환
             }
         }
 
-        public Node delete_min_heap() {
-            Node min = heap[1];
-            Node lastNode = heap[size];
-            heap[1] = lastNode;
-            vertexPosition[lastNode.vertex] = 1;
-            heap[size--] = null;
-            minHeapify(1);
-            return min;
+        public Node delete_min_heap() { // 히프에서 가장 작은 키 값을 가진 노드 제거 후 값 반환
+            Node min = heap[1]; // 히프의 첫 번째 원소를 최솟값으로 저장
+            Node lastNode = heap[size]; // 히프의 마지막 원소를 저장
+            heap[1] = lastNode; // 히프의 마지막 원소를 히프의 첫 번째 위치로 이동
+            vertexPosition[lastNode.vertex] = 1; // 이동된 노드의 정점 위치 배열 업데이트
+            heap[size--] = null; // 히프의 크기를 줄이고, 마지막 원소의 위치를 NULL 설정으로 삭제
+            minHeapify(1); // 히프의 구조를 재조정을 위해 메소드 호출
+            return min; // 삭제된 최솟값 반환
         }
 
-        private void minHeapify(int index) {
-            int smallest = index;
-            int left = 2 * index;
-            int right = 2 * index + 1;
+        private void minHeapify(int index) { // 히프의 속성을 재구성
+            int smallest = index; // 현 index 가 가장 작다고 가정 설정
+            int left = 2 * index; // 왼쪽 자식 노드 index 계산
+            int right = 2 * index + 1; // 오른쪽 자식 노드 index 계산
 
             if (left <= size && heap[left].compareTo(heap[smallest]) < 0) {
                 smallest = left;
