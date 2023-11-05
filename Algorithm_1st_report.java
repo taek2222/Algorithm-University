@@ -105,7 +105,6 @@ public class Algorithm_1st_report {
             MST_V[i] = false; // 모든 정점이 아직 포함되지 않음을 표시를 위한 초기화
             heap.add(new Node(i, distance[i])); // 모든 정점을 히프에 추가.
         }
-
         distance[0] = 0; // 최소 신장 트리의 프림 알고리즘 첫 시작점 0 설정
         heap.decreaseKey(0, distance[0]);
 
@@ -113,7 +112,6 @@ public class Algorithm_1st_report {
             Node u = heap.delete_min_heap(); // 히프에서 최소 가중치 노드를 삭제함과 동시에 반한해서 저장
             MST_V[u.vertex] = true;  // 추출한 최소 가중치 노드는 이제 입력 되므로 정점에 등록을 알림
 
-            // for each (u에 인접한 정점 w)에 해당하는 부분
             for (int w = 0; w < n; w++) {
                 if (graph[u.vertex][w] != 0 && !MST_V[w]) { // MST_V에 ture(등록)된 정점이 아니며 인접 행렬에서 0이 아닌 경우
                     if (graph[u.vertex][w] < distance[w]) { // 만약 간선의 가중치가 현재 w까지의 거리보다 작으면
@@ -124,19 +122,25 @@ public class Algorithm_1st_report {
                 }
             }
         }
-
-        // Print the constructed MST
-        printMST(nearest, graph, n);
+        printMST(nearest, graph, n); // 연결된 간선, 가중치 출력
+        printTotalWeight(nearest, graph, n); // 최종 가중치 출력
     }
 
-    private void printMST(int[] parent, int[][] graph, int n) {
+    private void printMST(int[] nearest, int[][] graph, int n) {
+        System.out.println("MST 포함 정점 및 간선:");
+        for (int i = 1; i < n; i++) { // 0은 시작점이므로 1부터 시작
+            if (nearest[i] != -1) {
+                System.out.println("(" + nearest[i] + ", " + i + ") - 가중치: " + graph[i][nearest[i]]);
+            }
+        }
+    }
+
+    private void printTotalWeight(int[] parent, int[][] graph, int n) {
         int totalWeight = 0;
-        System.out.println("Edge \tWeight");
         for (int i = 1; i < n; i++) {
-            System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
             totalWeight += graph[i][parent[i]];
         }
-        System.out.println("Total weight of MST: " + totalWeight);
+        System.out.println("최종 가중치 합: " + totalWeight);
     }
 
     public static void main(String[] args) {
