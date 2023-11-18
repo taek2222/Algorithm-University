@@ -27,10 +27,38 @@ public class Main {
             if(list[n1] <= list[n2]) sorted[s++] = list[n1++]; // 더 작은 요소를 sorted 배열에 추가
             else sorted[s++] = list[n2++];
         }
-        if(n1 > mid) while (n2 <= high) sorted[s++] = list[n2++]; // 남은 부분 처리 과정
-        else while (n1 <= mid) sorted[s++] = list[n1++];
+        if(n1 > mid)
+            while (n2 <= high) sorted[s++] = list[n2++]; // 남은 부분 처리 과정
+        else
+            while (n1 <= mid) sorted[s++] = list[n1++];
         for(i = low; i <= high; i++) list[i] = sorted[i]; // 임시 배열 내용을 원래 배열에 저장
     }
+
+    //퀵 정렬(분할 정복) 분할
+    public static void quicksort_DC(int[] list, int low, int high) {
+        int pivot_pos;
+        if(low < high){
+            pivot_pos = partition(list, low, high);
+            quicksort_DC(list, low, pivot_pos-1);
+            quicksort_DC(list, pivot_pos+1, high);
+        }
+    }
+    // 퀵 정렬(분할 정복) 교환
+    private static int partition(int[] list, int low, int high) {
+        int pivot = list[low];
+        int i, j = low;
+        for(i = low+1; i <= high; i++)
+            if(list[i] < pivot) {
+                j++;
+                int temp = list[i];
+                list[i] = list[j];
+                list[j] = temp;
+            }
+        list[low] = list[j];
+        list[j] = pivot;
+        return j;
+    }
+
 
     public static void main(String[] args) {
         int[] Random = new int[100000]; // 데이터 배열
@@ -42,17 +70,24 @@ public class Main {
         // 합병 정렬 시간 측정 및 시작
         long Merge_beforeTime = System.currentTimeMillis(); // 시간 측정 시작
 
-        merge_sort_DC(Merge, 0, Random.length-1);
-        for(int i = 0; i < Random.length; i++)
-            System.out.println(i+ " : " + Random[i]);
+        merge_sort_DC(Merge, 0, Merge.length-1);
+        for(int i = 0; i < Merge.length; i++)
+            System.out.println(i+ " : " + Merge[i]);
 
         long Merge_afterTime = System.currentTimeMillis(); // 시간 측정 완료
         long Merge_result = Merge_afterTime - Merge_beforeTime; // 최종 시간 계산
         System.out.println("합병 정렬 실행 시간(ms) : " + Merge_result);
 
-        // 퀵정렬 시간 측정 및 시작
+        //퀵정렬 시간 측정 및 시작
         long Quick_beforeTime = System.currentTimeMillis(); // 시간 측정 시작
 
+        quicksort_DC(Quick, 0, Quick.length-1);
+        for(int i = 0; i < Quick.length; i++)
+            System.out.println(i+ " Quick : " + Quick[i]);
+        long Quick_afterTime = System.currentTimeMillis(); // 시간 측정 완료
+        long Quick_result = Quick_afterTime - Quick_beforeTime; // 최종 시간 계산
+        System.out.println("합병 정렬 실행 시간(ms) : " + Merge_result);
+        System.out.println("퀵 정렬 실행 시간(ms) : " + Quick_result);
 
     }
 }
