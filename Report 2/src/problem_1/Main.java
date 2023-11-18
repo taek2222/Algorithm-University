@@ -8,7 +8,7 @@ public class Main {
             array[i] = (int)(Math.random()*100); // Math 메소드를 활용해 100 미만 랜덤 수 생성.
     }
 
-    // 합병정렬(분할정복) 분할
+    // 합병 정렬(분할 정복) 분할
     public static void merge_sort_DC(int[] list, int low, int high) {
         int middle;
         if(low < high) { // 재귀적으로 계속 호출하여 분할 과정 진행
@@ -19,7 +19,7 @@ public class Main {
         }
     }
 
-    // 합병정렬(분할정복) 병합
+    // 합병 정렬(분할 정복) 병합
     private static void merge(int[] list, int low, int mid, int high) {
         int n1 = low, n2 = mid + 1, s = low, i; // 첫 번쩨, 두 번째 부분 배열, 저장할 인덱스 배열 번호
         int[] sorted = new int[list.length]; // 정렬된 내용 임시 배열 선언
@@ -33,14 +33,27 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        int[] Random = new int[10000]; // 데이터 배열
+        int[] Random = new int[100000]; // 데이터 배열
         Random_array(Random); // 랜덤 수 선정
-        int[] Merge = Random.clone(); // 합병정렬 배열 선언 (랜덤 수 배열 복사)
+        int[] Merge = Random.clone(); // 합병 정렬 배열 선언 (랜덤 수 배열 복사)
         int[] Quick = Random.clone(); // 퀵정렬 배열 선언 (랜덤 수 배열 복사)
+
+
+        // 합병 정렬 시간 측정 및 시작
+        long Merge_beforeTime = System.currentTimeMillis(); // 시간 측정 시작
 
         merge_sort_DC(Merge, 0, Random.length-1);
         for(int i = 0; i < Random.length; i++)
             System.out.println(i+ " : " + Random[i]);
+
+        long Merge_afterTime = System.currentTimeMillis(); // 시간 측정 완료
+        long Merge_result = Merge_afterTime - Merge_beforeTime; // 최종 시간 계산
+        System.out.println("합병 정렬 실행 시간(ms) : " + Merge_result);
+
+        // 퀵정렬 시간 측정 및 시작
+        long Quick_beforeTime = System.currentTimeMillis(); // 시간 측정 시작
+
+
     }
 }
 
