@@ -38,66 +38,61 @@ public class Quick_Threshold {
     }
 
     // 삽입 정렬
-    private static void insertionSort(int[] list, int low, int high) {
+    public static void insertionSort(int[] list, int low, int high) {
         for (int i = low + 1; i <= high; i++) {
-            int key = list[i];
-            int j = i - 1;
-
-            while (j >= low && list[j] > key) {
+            int next = list[i];
+            int j;
+            for (j = i - 1; j >= low && list[j] > next; j--)
                 list[j + 1] = list[j];
-                j--;
-            }
-            list[j + 1] = key;
+            list[j + 1] = next;
         }
     }
 
+    // 임계값에 따른 퀵정렬
+
+
     public static void main(String[] args) {
-        int[] Random = new int[1000000]; // 데이터 배열
-        Random_array(Random); // 랜덤 수 선정
+        int Data_Size = 1000000; // n 데이터 사이즈
+        int[][] Data_Array = new int[10][Data_Size]; // 10개 배열의 각각 무작위 1000000개의 수 저장 배열
+        double Time_Total;
 
-        int[] Quick = Random.clone(); // 일반 퀵정렬 배열 선언 (랜덤 수 배열 복사)
-        int[] Quick_Threshold_1 = Random.clone(); // 퀵 정렬 임계값 배열 선언 (랜덤 수 배열 복사)_1
-        int[] Quick_Threshold_2 = Random.clone(); // 퀵 정렬 임계값 배열 선언 (랜덤 수 배열 복사)_2
-        int[] Quick_Threshold_3 = Random.clone(); // 퀵 정렬 임계값 배열 선언 (랜덤 수 배열 복사)_3
+        for(int i = 0; i < 10; i++) // 10개 배열 무작위 수 생성
+            Random_array(Data_Array[i]);
 
-        // 일반 퀵정렬 시간 측정 및 시작
-        long Quick_beforeTime = System.currentTimeMillis(); // 일반 퀵정렬 시간 측정 시작
+        System.out.println("\n*** 총 데이터 수 "+ Data_Size +"개의 임계값의 따른 퀵정렬 처리 속도 비교 *** \n");
 
-        quicksort_DC(Quick, 0, Quick.length-1, 0);
+        // 퀵정렬 시간 측정 및 시작
+        System.out.println("** 랜덤 배열 각각의 실행 시간 비교 및 평균 시간 [일반 퀵정렬] **");
+        Time_Total = 0; // 총 시간 초기화
+        for(int i = 0; i < 10; i++) {
+            int[] Quick_Threshold = Data_Array[i].clone(); // 기존 데이터 보존을 위한 복사
+            long Quick_Threshold_beforeTime = System.currentTimeMillis(); // 일반 퀵정렬 시간 측정 시작
 
-        long Quick_afterTime = System.currentTimeMillis(); // 시간 측정 완료
-        long Quick_result = Quick_afterTime - Quick_beforeTime; // 최종 시간 계산
+            quicksort_DC(Quick_Threshold, 0, Data_Size-1, 0); // 퀵 정렬 실행 (임계값 0 = 퀵정렬)
 
-        // 임계값_1 퀵정렬 시간 측정 및 시작
-        long Quick_beforeTime_Threshold_1 = System.currentTimeMillis(); // 임계값 퀵정렬 시간 측정 시작
+            long Quick_Threshold_afterTime = System.currentTimeMillis(); // 시간 측정 완료
+            long Quick_Threshold_result = Quick_Threshold_afterTime - Quick_Threshold_beforeTime; // 최종 시간 계산
+            System.out.println( (i+1) + "번째 데이터 실행 시간 : " + Quick_Threshold_result); // 각각의 실행 시간 출력
+            Time_Total += Quick_Threshold_result; // 총 실행 시간 합산
+        }
+        System.out.println("[일반 퀵정렬]의 평균 실행 시간 : " + Time_Total/Data_Array.length); // 평균 실행 시간 계산
 
-        quicksort_DC(Quick_Threshold_1, 0, Quick_Threshold_1.length-1, 100);
+        // 임계값에 따른 퀵정렬 시간 측정 반복문
+        for(int Threshold = 1; Threshold <= Data_Size; Threshold *= 10) {
+            System.out.println("\n** 랜덤 배열 각각의 실행 시간 비교 및 평균 시간 [임계값 : "+Threshold+"의 퀵정렬] **\n");
+            Time_Total = 0; // 총 시간 초기화
+            for(int i = 0; i < 10; i++) {
+                int[] Quick_Threshold = Data_Array[i].clone(); // 기존 데이터 보존을 위한 복사
+                long Quick_Threshold_beforeTime = System.currentTimeMillis(); // 일반 퀵정렬 시간 측정 시작
 
-        long Quick_Threshold_1_afterTime = System.currentTimeMillis(); // 시간 측정 완료
-        long Quick_Threshold_1_result = Quick_Threshold_1_afterTime - Quick_beforeTime_Threshold_1; // 최종 시간 계산
+                quicksort_DC(Quick_Threshold, 0, Data_Size-1, Threshold); // 퀵 정렬 실행 (임계값 1 ~ n 까지)
 
-        // 임계값_2 퀵정렬 시간 측정 및 시작
-        long Quick_beforeTime_Threshold_2 = System.currentTimeMillis(); // 임계값 퀵정렬 시간 측정 시작
-
-        quicksort_DC(Quick_Threshold_2, 0, Quick_Threshold_2.length-1, 1000);
-
-        long Quick_Threshold_2_afterTime = System.currentTimeMillis(); // 시간 측정 완료
-        long Quick_Threshold_2_result = Quick_Threshold_2_afterTime - Quick_beforeTime_Threshold_2; // 최종 시간 계산
-
-
-        // 임계값_3 퀵정렬 시간 측정 및 시작
-        long Quick_beforeTime_Threshold_3 = System.currentTimeMillis(); // 임계값 퀵정렬 시간 측정 시작
-
-        quicksort_DC(Quick_Threshold_3, 0, Quick_Threshold_3.length-1, 10000);
-
-        long Quick_Threshold_3_afterTime = System.currentTimeMillis(); // 시간 측정 완료
-        long Quick_Threshold_3_result = Quick_Threshold_3_afterTime - Quick_beforeTime_Threshold_3; // 최종 시간 계산
-
-
-
-        System.out.println("퀵 정렬 실행 시간(ms) : " + Quick_result);
-        System.out.println("퀵 정렬 실행 시간(ms) : " + Quick_Threshold_1_result);
-        System.out.println("퀵 정렬 실행 시간(ms) : " + Quick_Threshold_2_result);
-        System.out.println("퀵 정렬 실행 시간(ms) : " + Quick_Threshold_3_result);
+                long Quick_Threshold_afterTime = System.currentTimeMillis(); // 시간 측정 완료
+                long Quick_Threshold_result = Quick_Threshold_afterTime - Quick_Threshold_beforeTime; // 최종 시간 계산
+                System.out.println( (i+1) + "번째 데이터 실행 시간 : " + Quick_Threshold_result); // 각각의 실행 시간 출력
+                Time_Total += Quick_Threshold_result; // 총 실행 시간 합산
+            }
+            System.out.println("[임계값 : "+Threshold+"의 퀵정렬]의 평균 실행 시간 : " + Time_Total/Data_Array.length); // 평균 실행 시간 계산
+        }
     }
 }
