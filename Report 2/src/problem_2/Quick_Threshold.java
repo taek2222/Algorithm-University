@@ -24,7 +24,7 @@ public class Quick_Threshold {
     }
 
     // 퀵 정렬(분할 정복)
-    private static int partition(int[] list, int low, int high) {
+    public static int partition(int[] list, int low, int high) {
         int pivot = list[low]; // 피벗을 배열의 첫 번째 요소로 선택
         int i, j = low;
         for(i = low+1; i <= high; i++) // 피벗보다 작은 요소 왼쪽, 큰 요소 오른쪽 이동
