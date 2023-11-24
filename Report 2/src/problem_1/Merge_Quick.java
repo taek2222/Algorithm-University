@@ -1,11 +1,38 @@
 package problem_1;
 
-public class Main {
+public class Merge_Quick {
 
     // 무작위 수 생성
     public static void Random_array(int[] array) {
         for(int i = 0; i < array.length; i++)
             array[i] = (int)(Math.random()*100); // Math 메소드를 활용해 100 미만 랜덤 수 생성.
+    }
+
+    // 정렬 전, 후 출력
+    public static void printf(int[] array, int[] sort_array, String str) {
+        System.out.println("[" + str + " 정렬 전] 가장 앞 5개 배열");
+        for(int i = 0; i < 5; i++)
+            System.out.println((i + 1) + " 번째 숫자 : [" + array[i] + "] ");
+
+        System.out.println();
+
+        System.out.println("[" + str + " 정렬 전] 가장 뒤 5개 배열");
+        for(int i = array.length - 1; i > array.length-6; i--)
+            System.out.println((i + 1) + " 번째 숫자 : [" + array[i] + "] ");
+
+        System.out.println();
+
+        System.out.println("[" + str + " 정렬 후] 가장 앞 5개 배열");
+        for(int i = 0; i < 5; i++)
+            System.out.println((i + 1) + " 번째 숫자 : [" + sort_array[i] + "] ");
+
+        System.out.println();
+
+        System.out.println("[" + str + " 정렬 후] 가장 뒤 5개 배열");
+        for(int i = array.length - 1; i > array.length-6; i--)
+            System.out.println((i + 1) + " 번째 숫자 : [" + sort_array[i] + "] ");
+
+        System.out.println();
     }
 
     // 합병 정렬(분할 정복) 분할
@@ -37,10 +64,10 @@ public class Main {
     //퀵 정렬(분할 정복) 분할
     public static void quicksort_DC(int[] list, int low, int high) {
         int pivot_pos;
-        if(low < high){
-            pivot_pos = partition(list, low, high);
-            quicksort_DC(list, low, pivot_pos-1);
-            quicksort_DC(list, pivot_pos+1, high);
+        if(low < high){ // 재귀적으로 계속 호출하여 분할 과정 진행
+            pivot_pos = partition(list, low, high); // 피벗 고르기
+            quicksort_DC(list, low, pivot_pos-1); // 피벗을 기반 나누기
+            quicksort_DC(list, pivot_pos+1, high); // 피벗을 기반 나누기
         }
     }
     // 퀵 정렬(분할 정복) 교환
@@ -70,20 +97,19 @@ public class Main {
         // 합병 정렬 시간 측정 및 시작
         long Merge_beforeTime = System.currentTimeMillis(); // 시간 측정 시작
 
-        merge_sort_DC(Merge, 0, Merge.length-1);
-        for(int i = 0; i < Merge.length; i++)
-            System.out.println(i+ " : " + Merge[i]);
+        merge_sort_DC(Merge, 0, Merge.length-1); // 합병 정렬 START
+        printf(Random, Merge, "합병");
+
 
         long Merge_afterTime = System.currentTimeMillis(); // 시간 측정 완료
         long Merge_result = Merge_afterTime - Merge_beforeTime; // 최종 시간 계산
-        System.out.println("합병 정렬 실행 시간(ms) : " + Merge_result);
 
         //퀵정렬 시간 측정 및 시작
         long Quick_beforeTime = System.currentTimeMillis(); // 시간 측정 시작
 
         quicksort_DC(Quick, 0, Quick.length-1);
-        for(int i = 0; i < Quick.length; i++)
-            System.out.println(i+ " Quick : " + Quick[i]);
+        printf(Random, Quick, "퀵");
+
         long Quick_afterTime = System.currentTimeMillis(); // 시간 측정 완료
         long Quick_result = Quick_afterTime - Quick_beforeTime; // 최종 시간 계산
         System.out.println("합병 정렬 실행 시간(ms) : " + Merge_result);
