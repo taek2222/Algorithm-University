@@ -5,7 +5,7 @@ public class Merge_Quick {
     // 무작위 수 생성
     public static void Random_array(int[] array) {
         for(int i = 0; i < array.length; i++)
-            array[i] = (int)(Math.random()*100); // Math 메소드를 활용해 100 미만 랜덤 수 생성.
+            array[i] = (int)(Math.random()*10000); // Math 메소드를 활용해 100 미만 랜덤 수 생성.
     }
 
     // 합병 정렬(분할 정복) 분할
@@ -15,12 +15,12 @@ public class Merge_Quick {
             middle = (low + high) / 2;
             merge_sort_DC(list, low, middle); // 최소 ~ 중간 값
             merge_sort_DC(list, middle+1, high); // 중간 값 ~ 최대 값
-            merge(list, low, middle, high); // 병항 과정
+            merge(list, low, middle, high); // 병합 과정
         }
     }
 
     // 합병 정렬(분할 정복) 병합
-    private static void merge(int[] list, int low, int mid, int high) {
+    public static void merge(int[] list, int low, int mid, int high) {
         int n1 = low, n2 = mid + 1, s = low, i; // 첫 번쩨, 두 번째 부분 배열, 저장할 인덱스 배열 번호
         int[] sorted = new int[list.length]; // 정렬된 내용 임시 배열 선언
         while (n1 <= mid && n2 <= high) { // 비교 시작 과정
@@ -43,6 +43,7 @@ public class Merge_Quick {
             quicksort_DC(list, pivot_pos+1, high); // 피벗을 기반 나누기
         }
     }
+
     // 퀵 정렬(분할 정복) 교환
     public static int partition(int[] list, int low, int high) {
         int pivot = list[low]; // 피벗을 첫 번째 요소로 선택
@@ -62,7 +63,7 @@ public class Merge_Quick {
 
 
     public static void main(String[] args) {
-        int Data_Size = 100000; // n 데이터 사이즈
+        int Data_Size = 1000000; // n 데이터 사이즈
         int[][] Data_Array = new int[10][Data_Size]; // 10개 배열의 각각 무작위 1000000개의 수 저장 배열
 
         for(int i = 0; i < 10; i++) // 10개 배열 무작위 수 생성
